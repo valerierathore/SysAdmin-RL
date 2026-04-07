@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sysadmin-rl"
 version = "0.1.0"
-description = "SysAdmin RL Environment for Hackathon"
+description = "SysAdmin RL Environment"
 dependencies = [
     "flask",
     "numpy",
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-server = "app:run_flask"
+server = "server.app:main"
 
 [tool.setuptools]
-packages = ["."]
+packages = ["server"]
