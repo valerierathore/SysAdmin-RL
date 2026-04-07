@@ -9,7 +9,11 @@ description = "SysAdmin RL Environment for Hackathon"
 dependencies = [
     "flask",
     "numpy",
+    "openenv-core>=0.2.0",
 ]
+
+[project.scripts]
+server = "app:run_flask"
 
 [tool.setuptools]
 packages = ["."]
