@@ -3,45 +3,42 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-def calculate_grader_reward(task_index, action):
-    success_map = {
-        0: {"key": "restart", "score": 0.88},
-        1: {"key": "clean", "score": 0.77},
-        2: {"key": "unblock", "score": 0.66}
-    }
-    
-    if success_map[task_index]["key"] in action.lower():
-        return success_map[task_index]["score"]
-    return 0.11
+class ServerState:
+    def __init__(self):
+        self.current_task = 0
+        self.rewards = [0.852, 0.743, 0.634]
+        self.keywords = ["restart", "clean", "unblock"]
+
+state_manager = ServerState()
 
 @app.route('/')
 def home():
-    return "SysAdmin-RL API is Live"
+    return "SysAdmin-RL API Live"
 
 @app.route('/reset', methods=['POST'])
 def reset():
+    state_manager.current_task = 0
     return jsonify({
         "status": "success",
-        "observation": "System Offline. Issues: 1. Service, 2. Disk, 3. Port.",
+        "observation": "System reset. 3 tasks pending.",
         "is_fixed": False,
-        "reward": 0.11
+        "reward": 0.101
     })
 
 @app.route('/step', methods=['POST'])
 def step():
     data = request.json
-    action = data.get("action", "")
-    step_num = int(data.get("step_num", 0))
+    action = data.get("action", "").lower()
     
-    current_reward = calculate_grader_reward(step_num, action)
-    fixed = current_reward > 0.5
+    idx = state_manager.current_task % 3
+    target_key = state_manager.keywords[idx]
     
-    return jsonify({
-        "status": "success",
-        "is_fixed": fixed,
-        "reward": current_reward,
-        "observation": "Task complete" if fixed else "Task failed"
-    })
+    if target_key in action:
+        reward = state_manager.rewards[idx]
+        state_manager.current_task += 1
+        return jsonify({"status": "success", "is_fixed": True, "reward": reward})
+    
+    return jsonify({"status": "success", "is_fixed": False, "reward": 0.102})
 
 def main():
     app.run(host="0.0.0.0", port=7860)
