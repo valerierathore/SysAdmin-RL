@@ -24,7 +24,7 @@ def run_inference():
         for i, task in enumerate(tasks):
             client.chat.completions.create(
                 model=MODEL_NAME,
-                messages=[{"role": "user", "content": f"Resolve: {task['name']}"}]
+                messages=[{"role": "user", "content": f"Task: {task['name']}"}]
             )
             
             res = requests.post(f"{ENV_URL}/step", json={"action": task['cmd'], "task_id": task['id']}, timeout=5).json()
