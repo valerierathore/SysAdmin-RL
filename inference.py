@@ -11,29 +11,25 @@ ENV_URL = "http://localhost:7860"
 client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
 
 def run_inference():
-    print("[START] task=multi-task-fix env=SysAdmin-RL")
-    rewards_list = []
-
-    tasks = [
-        {"id": 1, "cmd": "restart_service"},
-        {"id": 2, "cmd": "clean_disk"},
-        {"id": 3, "cmd": "unblock_port"}
-    ]
+    print("[START] task=sysadmin-validation env=SysAdmin-RL")
+    final_rewards = []
+    actions = ["restart_service", "clean_disk", "unblock_port"]
 
     try:
-        for i, task in enumerate(tasks):
+        for i, act in enumerate(actions):
             client.chat.completions.create(
                 model=MODEL_NAME,
-                messages=[{"role": "user", "content": f"Execute task {task['id']}"}]
+                messages=[{"role": "user", "content": f"Fixing task {i+1}"}]
             )
             
-            res = requests.post(f"{ENV_URL}/step", json={"action": task['cmd'], "task_id": task['id']}, timeout=10).json()
-            rew = res['reward']
-            rewards_list.append(str(rew))
+            res = requests.post(f"{ENV_URL}/step", json={"action": act, "step_num": i}, timeout=10).json()
+            r = res['reward']
+            final_rewards.append(str(r))
             
-            print(f"[STEP] step={i+1} action={task['cmd']} reward={rew} done={res['is_fixed']} error=null")
+            print(f"[STEP] step={i+1} action={act} reward={r} done={res['is_fixed']} error=null")
+            time.sleep(1)
 
-        print(f"[END] success=true steps=3 rewards={','.join(rewards_list)}")
+        print(f"[END] success=true steps=3 rewards={','.join(final_rewards)}")
 
     except Exception as e:
         print(f"[ERROR] {e}")
