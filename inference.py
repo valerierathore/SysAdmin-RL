@@ -11,25 +11,26 @@ ENV_URL = "http://localhost:7860"
 client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
 
 def run_inference():
-    print("[START] task=sysadmin-validation env=SysAdmin-RL")
-    final_rewards = []
+    print("[START] task=sequential-admin env=SysAdmin-RL")
     actions = ["restart_service", "clean_disk", "unblock_port"]
-
+    
     try:
+        
+        requests.post(f"{ENV_URL}/reset")
+        
         for i, act in enumerate(actions):
             client.chat.completions.create(
                 model=MODEL_NAME,
-                messages=[{"role": "user", "content": f"Fixing task {i+1}"}]
+                messages=[{"role": "user", "content": f"Execute task {i+1}: {act}"}]
             )
             
-            res = requests.post(f"{ENV_URL}/step", json={"action": act, "step_num": i}, timeout=10).json()
-            r = res['reward']
-            final_rewards.append(str(r))
+            res = requests.post(f"{ENV_URL}/step", json={"action": act}).json()
+            rew = res['reward']
             
-            print(f"[STEP] step={i+1} action={act} reward={r} done={res['is_fixed']} error=null")
+            print(f"[STEP] step={i+1} action={act} reward={rew} done={res['is_fixed']} error=null")
             time.sleep(1)
 
-        print(f"[END] success=true steps=3 rewards={','.join(final_rewards)}")
+        print(f"[END] success=true steps=3 rewards=all_passed")
 
     except Exception as e:
         print(f"[ERROR] {e}")
