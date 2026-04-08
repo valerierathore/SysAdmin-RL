@@ -3,6 +3,17 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+def calculate_grader_reward(task_index, action):
+    success_map = {
+        0: {"key": "restart", "score": 0.88},
+        1: {"key": "clean", "score": 0.77},
+        2: {"key": "unblock", "score": 0.66}
+    }
+    
+    if success_map[task_index]["key"] in action.lower():
+        return success_map[task_index]["score"]
+    return 0.11
+
 @app.route('/')
 def home():
     return "SysAdmin-RL API is Live"
@@ -11,42 +22,26 @@ def home():
 def reset():
     return jsonify({
         "status": "success",
-        "observation": "System Issues Detected: Task 1: Web, Task 2: Disk, Task 3: Port.",
+        "observation": "System Offline. Issues: 1. Service, 2. Disk, 3. Port.",
         "is_fixed": False,
-        "reward": 0.123
-    })
-
-@app.route('/state', methods=['GET'])
-def state():
-    return jsonify({
-        "status": "active",
-        "is_fixed": False,
-        "reward": 0.123,
-        "observation": "Waiting for task execution."
+        "reward": 0.11
     })
 
 @app.route('/step', methods=['POST'])
 def step():
     data = request.json
-    action = data.get("action", "").lower()
-    task_id = int(data.get("task_id", 1))
+    action = data.get("action", "")
+    step_num = int(data.get("step_num", 0))
     
-    if task_id == 1:
-        if "restart" in action:
-            return jsonify({"status": "success", "is_fixed": True, "reward": 0.881})
-        return jsonify({"status": "success", "is_fixed": False, "reward": 0.111})
+    current_reward = calculate_grader_reward(step_num, action)
+    fixed = current_reward > 0.5
     
-    elif task_id == 2:
-        if "clean" in action:
-            return jsonify({"status": "success", "is_fixed": True, "reward": 0.772})
-        return jsonify({"status": "success", "is_fixed": False, "reward": 0.112})
-    
-    elif task_id == 3:
-        if "unblock" in action:
-            return jsonify({"status": "success", "is_fixed": True, "reward": 0.663})
-        return jsonify({"status": "success", "is_fixed": False, "reward": 0.113})
-
-    return jsonify({"status": "error", "reward": 0.055})
+    return jsonify({
+        "status": "success",
+        "is_fixed": fixed,
+        "reward": current_reward,
+        "observation": "Task complete" if fixed else "Task failed"
+    })
 
 def main():
     app.run(host="0.0.0.0", port=7860)
