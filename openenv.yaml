@@ -6,15 +6,12 @@ sdk: docker
 tasks:
   - id: easy
     description: "Restart service"
-    grader:
-      name: server.graders.easy_grader
+    grader: "server.graders.easy_grader"
 
   - id: medium
     description: "Clean disk"
-    grader:
-      name: server.graders.medium_grader
+    grader: "server.graders.medium_grader"
 
   - id: hard
     description: "Unblock port"
-    grader:
-      name: server.graders.hard_grader
+    grader: "server.graders.hard_grader"
