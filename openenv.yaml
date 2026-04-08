@@ -4,9 +4,20 @@ entry_point: server.app:main
 sdk: docker
 
 tasks:
-  - id: 1
-    description: "Restarting service"
-  - id: 2
-    description: "Cleaning disk"
-  - id: 3
-    description: "Unblocking port"
+  - id: easy
+    description: "Restart service task"
+    grader:
+      type: function
+      name: graders.easy_grader
+
+  - id: medium
+    description: "Clean disk task"
+    grader:
+      type: function
+      name: graders.medium_grader
+
+  - id: hard
+    description: "Unblock port task"
+    grader:
+      type: function
+      name: graders.hard_grader
