@@ -2,10 +2,16 @@ env_id: SysAdmin-RL
 version: "0.1.0"
 entry_point: server.app:main
 sdk: docker
+
 tasks:
-  - id: 1
-    description: "Restarting service"
-  - id: 2
-    description: "Cleaning disk"
-  - id: 3
-    description: "Unblocking port"
+  - id: easy
+    description: "Restart service task"
+    grader: graders.easy_grader
+
+  - id: medium
+    description: "Clean disk task"
+    grader: graders.medium_grader
+
+  - id: hard
+    description: "Unblock port task"
+    grader: graders.hard_grader
