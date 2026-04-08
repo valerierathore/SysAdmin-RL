@@ -5,18 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sysadmin-rl"
 version = "0.1.0"
-description = "SysAdmin RL Environment"
-readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "flask",
     "numpy",
     "requests",
+    "pydantic",
+    "openai",
     "openenv-core",
 ]
-
-[project.scripts]
-server = "server.app:main"
-
-[tool.setuptools]
-packages = ["server"]
