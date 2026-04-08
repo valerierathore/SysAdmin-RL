@@ -1,6 +1,4 @@
 import os
-import time
-import threading
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -13,7 +11,7 @@ def home():
 def reset():
     return jsonify({
         "status": "success", 
-        "output": "Terminal initialized. System alert: 'web_server' is unresponsive.",
+        "output": "Terminal initialized. Alert: 'web_server' is down.",
         "is_fixed": False
     })
 
@@ -21,10 +19,17 @@ def reset():
 def step():
     return jsonify({
         "status": "success",
-        "output": "Service 'web_server' restarted on port 8080.",
+        "output": "Service 'web_server' restarted.",
         "is_fixed": True,
         "reward": 1.0
     })
+
+def main():
+   
+    app.run(host="0.0.0.0", port=7860)
+
+if __name__ == "__main__":
+    main()
 
 
 def main():
