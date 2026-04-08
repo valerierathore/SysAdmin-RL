@@ -1,5 +1,6 @@
 flask
 numpy
 requests
-openenv-core
+pydantic
 openai
+openenv-core
