@@ -12,9 +12,9 @@ def home():
 def reset():
     return jsonify({
         "status": "success",
-        "observation": "System alert: multiple issues detected.",
+        "observation": "System Offline. 3 Tasks Pending: 1. Restart Web, 2. Clear Cache, 3. Update Firewall.",
         "is_fixed": False,
-        "reward": 0.01
+        "reward": 0.02
     })
 
 @app.route('/state', methods=['GET'])
@@ -22,8 +22,8 @@ def state():
     return jsonify({
         "status": "active",
         "is_fixed": False,
-        "reward": 0.01,
-        "observation": "System waiting for input."
+        "reward": 0.02,
+        "observation": "Waiting for task selection."
     })
 
 @app.route('/step', methods=['POST'])
@@ -47,7 +47,7 @@ def step():
             return jsonify({"status": "success", "is_fixed": True, "reward": 0.88})
         return jsonify({"status": "success", "is_fixed": False, "reward": 0.05})
 
-    return jsonify({"status": "error", "reward": 0.01})
+    return jsonify({"status": "error", "reward": 0.02})
 
 def main():
     app.run(host="0.0.0.0", port=7860)
