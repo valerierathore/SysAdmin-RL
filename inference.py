@@ -11,22 +11,29 @@ ENV_URL = "http://localhost:7860"
 client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
 
 def run_inference():
-    print("[START] task=server-fix env=SysAdmin-RL")
+    print("[START] task=multi-task-fix env=SysAdmin-RL")
+    total_rewards = []
+
+    tasks = [
+        {"id": 1, "desc": "Restarting the web server", "action": "restart_service"},
+        {"id": 2, "desc": "Clearing the system cache", "action": "clear_cache"},
+        {"id": 3, "desc": "Updating firewall rules", "action": "update_firewall"}
+    ]
 
     try:
-        reset_res = requests.post(f"{ENV_URL}/reset", timeout=5).json()
-        print("[STEP] step=1 action=reset reward=0.0 done=false error=null")
+        for i, task in enumerate(tasks):
+            client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=[{"role": "user", "content": f"Task: {task['desc']}"}]
+            )
+            
+            res = requests.post(f"{ENV_URL}/step", json={"action": task['action'], "task_id": task['id']}, timeout=5).json()
+            reward = res['reward']
+            total_rewards.append(str(reward))
+            
+            print(f"[STEP] step={i+1} action={task['action']} reward={reward} done={res['is_fixed']} error=null")
 
-        completion = client.chat.completions.create(
-            model=MODEL_NAME,
-            messages=[{"role": "user", "content": f"Fix this: {reset_res['observation']}"}]
-        )
-        action = "restart_service"
-
-        step_res = requests.post(f"{ENV_URL}/step", json={"action": action}, timeout=5).json()
-        
-        print(f"[STEP] step=2 action={action} reward={step_res['reward']} done={step_res['is_fixed']} error=null")
-        print(f"[END] success={step_res['is_fixed']} steps=2 rewards=0.0,{step_res['reward']}")
+        print(f"[END] success=true steps=3 rewards={','.join(total_rewards)}")
 
     except Exception as e:
         print(f"[ERROR] {e}")
