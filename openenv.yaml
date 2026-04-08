@@ -4,7 +4,7 @@ entry_point: server.app:main
 sdk: docker
 action_space:
   type: discrete
-  description: "Commands to fix the server (e.g., restart_service)"
+  description: "Commands to fix the server"
 observation_space:
   type: text
-  description: "Terminal output and system status"
+  description: "Terminal output"
