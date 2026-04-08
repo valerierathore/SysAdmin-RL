@@ -2,9 +2,10 @@ env_id: SysAdmin-RL
 version: "0.1.0"
 entry_point: server.app:main
 sdk: docker
-action_space:
-  type: discrete
-  description: "Commands to fix the server"
-observation_space:
-  type: text
-  description: "Terminal output"
+tasks:
+  - id: 1
+    description: "Restarting service"
+  - id: 2
+    description: "Cleaning disk"
+  - id: 3
+    description: "Unblocking port"
