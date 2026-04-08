@@ -5,19 +5,16 @@ sdk: docker
 
 tasks:
   - id: easy
-    description: "Restart service task"
+    description: "Restart service"
     grader:
-      type: function
-      name: graders.easy_grader
+      name: server.graders.easy_grader
 
   - id: medium
-    description: "Clean disk task"
+    description: "Clean disk"
     grader:
-      type: function
-      name: graders.medium_grader
+      name: server.graders.medium_grader
 
   - id: hard
-    description: "Unblock port task"
+    description: "Unblock port"
     grader:
-      type: function
-      name: graders.hard_grader
+      name: server.graders.hard_grader
