@@ -6,13 +6,13 @@ def normalize(score):
     return score
 
 
-def easy_grader(output):
+def easy_grader(output=None, **kwargs):
     return normalize(0.85)
 
 
-def medium_grader(output):
+def medium_grader(output=None, **kwargs):
     return normalize(0.75)
 
 
-def hard_grader(output):
+def hard_grader(output=None, **kwargs):
     return normalize(0.65)
