@@ -15,19 +15,19 @@ def run_inference():
     rewards_list = []
 
     tasks = [
-        {"id": 1, "name": "web_restart", "cmd": "restart_service"},
-        {"id": 2, "name": "cache_clear", "cmd": "clear_cache"},
-        {"id": 3, "name": "firewall_upd", "cmd": "update_firewall"}
+        {"id": 1, "cmd": "restart_service"},
+        {"id": 2, "cmd": "clean_disk"},
+        {"id": 3, "cmd": "unblock_port"}
     ]
 
     try:
         for i, task in enumerate(tasks):
             client.chat.completions.create(
                 model=MODEL_NAME,
-                messages=[{"role": "user", "content": f"Task: {task['name']}"}]
+                messages=[{"role": "user", "content": f"Execute task {task['id']}"}]
             )
             
-            res = requests.post(f"{ENV_URL}/step", json={"action": task['cmd'], "task_id": task['id']}, timeout=5).json()
+            res = requests.post(f"{ENV_URL}/step", json={"action": task['cmd'], "task_id": task['id']}, timeout=10).json()
             rew = res['reward']
             rewards_list.append(str(rew))
             
@@ -39,5 +39,5 @@ def run_inference():
         print(f"[ERROR] {e}")
 
 if __name__ == "__main__":
-    time.sleep(2)
+    time.sleep(5)
     run_inference()
