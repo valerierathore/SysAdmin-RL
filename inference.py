@@ -11,29 +11,22 @@ ENV_URL = "http://localhost:7860"
 client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
 
 def run_inference():
-    
     print("[START] task=server-fix env=SysAdmin-RL")
 
     try:
-    
-        res = requests.post(f"{ENV_URL}/reset").json()
-        print(f"[STEP] step=1 action=reset reward=0.0 done=false error=null")
+        reset_res = requests.post(f"{ENV_URL}/reset", timeout=5).json()
+        print("[STEP] step=1 action=reset reward=0.0 done=false error=null")
 
         completion = client.chat.completions.create(
             model=MODEL_NAME,
-            messages=[{"role": "user", "content": f"Logs: {res['observation']}. Fix it."}]
+            messages=[{"role": "user", "content": f"Fix this: {reset_res['observation']}"}]
         )
-        action_to_take = "restart_service" 
+        action = "restart_service"
 
-  
-        step_res = requests.post(f"{ENV_URL}/step", json={"action": action_to_take}).json()
-        reward = step_res["reward"]
-        done = step_res["is_fixed"]
+        step_res = requests.post(f"{ENV_URL}/step", json={"action": action}, timeout=5).json()
         
-        print(f"[STEP] step=2 action={action_to_take} reward={reward} done={done} error=null")
-        
-
-        print(f"[END] success={done} steps=2 rewards=0.0,{reward}")
+        print(f"[STEP] step=2 action={action} reward={step_res['reward']} done={step_res['is_fixed']} error=null")
+        print(f"[END] success={step_res['is_fixed']} steps=2 rewards=0.0,{step_res['reward']}")
 
     except Exception as e:
         print(f"[ERROR] {e}")
