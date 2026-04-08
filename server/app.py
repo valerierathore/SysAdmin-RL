@@ -1,25 +1,15 @@
 import os
 from flask import Flask, request, jsonify
 from pydantic import BaseModel
-from typing import Optional
 
 app = Flask(__name__)
 
-
-class ActionRequest(BaseModel):
-    action: str
-
-class StateResponse(BaseModel):
-    status: str
-    is_fixed: bool
-    reward: float
-    observation: str
-
-
+@app.route('/')
+def home():
+    return "SysAdmin-RL API is Live and Running!"
 
 @app.route('/reset', methods=['POST'])
 def reset():
-  
     return jsonify({
         "status": "success",
         "observation": "System alert: 'web_server' service is down (Port 80).",
@@ -29,20 +19,19 @@ def reset():
 
 @app.route('/state', methods=['GET'])
 def state():
-  
     return jsonify({
         "status": "active",
         "is_fixed": False,
         "reward": 0.0,
-        "observation": "Current system load: 0.5. Service 'web_server' is stopped."
+        "observation": "Service 'web_server' is stopped. Load: 0.1."
     })
 
 @app.route('/step', methods=['POST'])
 def step():
     data = request.json
-    action = data.get("action", "")
+    action = data.get("action", "").lower()
     
-    if "restart" in action.lower():
+    if "restart" in action:
         return jsonify({
             "status": "success",
             "observation": "Service 'web_server' restarted successfully.",
@@ -51,7 +40,7 @@ def step():
         })
     return jsonify({
         "status": "success",
-        "observation": "Command not recognized. Service still down.",
+        "observation": "Action failed. Service still down.",
         "is_fixed": False,
         "reward": 0.0
     })
