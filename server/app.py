@@ -12,9 +12,9 @@ def home():
 def reset():
     return jsonify({
         "status": "success",
-        "observation": "System Offline. 3 Tasks Pending: 1. Restart Web, 2. Clear Cache, 3. Update Firewall.",
+        "observation": "System Issues: 1. Service Down, 2. Disk Full, 3. Port Blocked.",
         "is_fixed": False,
-        "reward": 0.02
+        "reward": 0.15
     })
 
 @app.route('/state', methods=['GET'])
@@ -22,8 +22,8 @@ def state():
     return jsonify({
         "status": "active",
         "is_fixed": False,
-        "reward": 0.02,
-        "observation": "Waiting for task selection."
+        "reward": 0.15,
+        "observation": "Waiting for task."
     })
 
 @app.route('/step', methods=['POST'])
@@ -34,20 +34,20 @@ def step():
     
     if task_id == 1:
         if "restart" in action:
-            return jsonify({"status": "success", "is_fixed": True, "reward": 0.95})
-        return jsonify({"status": "success", "is_fixed": False, "reward": 0.05})
+            return jsonify({"status": "success", "is_fixed": True, "reward": 0.85})
+        return jsonify({"status": "success", "is_fixed": False, "reward": 0.15})
     
     elif task_id == 2:
-        if "cache" in action:
-            return jsonify({"status": "success", "is_fixed": True, "reward": 0.92})
-        return jsonify({"status": "success", "is_fixed": False, "reward": 0.05})
+        if "clean" in action or "clear" in action:
+            return jsonify({"status": "success", "is_fixed": True, "reward": 0.82})
+        return jsonify({"status": "success", "is_fixed": False, "reward": 0.15})
     
     elif task_id == 3:
-        if "firewall" in action:
-            return jsonify({"status": "success", "is_fixed": True, "reward": 0.88})
-        return jsonify({"status": "success", "is_fixed": False, "reward": 0.05})
+        if "unblock" in action or "port" in action:
+            return jsonify({"status": "success", "is_fixed": True, "reward": 0.78})
+        return jsonify({"status": "success", "is_fixed": False, "reward": 0.15})
 
-    return jsonify({"status": "error", "reward": 0.02})
+    return jsonify({"status": "error", "reward": 0.15})
 
 def main():
     app.run(host="0.0.0.0", port=7860)
