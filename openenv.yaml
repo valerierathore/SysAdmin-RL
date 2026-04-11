@@ -1,17 +1,26 @@
-env_id: SysAdmin-RL
+env_id: "SysAdmin-RL"
 version: "0.1.0"
-entry_point: server.app:main
-sdk: docker
+entry_point: "server.app:main"
+sdk: "docker"
+
+# Added metadata to help the Phase 2 agent understand the environment
+metadata:
+  render: false
+  max_steps: 10
+  category: "it-support"
 
 tasks:
-  - id: easy
-    description: "Restart service"
-    grader: server.graders.easy_grader
+  - id: "easy"
+    description: "Restart the crashed web service."
+    grader: "server.graders.easy_grader"
+    difficulty: "easy"
 
-  - id: medium
-    description: "Clean disk"
-    grader: server.graders.medium_grader
+  - id: "medium"
+    description: "Identify and clean disk space to allow log rotation."
+    grader: "server.graders.medium_grader"
+    difficulty: "medium"
 
-  - id: hard
-    description: "Unblock port"
-    grader: server.graders.hard_grader
+  - id: "hard"
+    description: "Diagnose a port 8080 conflict from logs and unblock it to restore service."
+    grader: "server.graders.hard_grader"
+    difficulty: "hard"
