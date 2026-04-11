@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "sysadmin-rl"
 version = "0.1.0"
 description = "Automated IT Support and System Diagnostics Environment"
+readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "flask",
@@ -14,13 +15,12 @@ dependencies = [
     "pydantic",
     "openai",
     "openenv-core",
-    "python-dotenv"
+    "python-dotenv",
 ]
 
 [project.scripts]
 server = "server.app:main"
 
-# FIXED: Combined into a single tool.setuptools section
 [tool.setuptools]
 packages = ["server", "server.graders"]
 
