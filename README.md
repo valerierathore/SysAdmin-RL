@@ -1,14 +1,28 @@
-# SysAdmin-RL
+---
+title: SysAdmin-RL
+emoji: 🚀
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
 
-A reinforcement learning environment for automated server maintenance, built for the Scaler Hackathon.
+# SysAdmin-RL: Automated IT Support Environment
 
-## Project Structure
-- server/app.py: The Flask-based RL environment.
-- inference.py: The baseline agent script using the LiteLLM proxy.
-- openenv.yaml: OpenEnv specification file.
-- Dockerfile: Container configuration for deployment.
+This repository contains an OpenEnv-compatible environment for evaluating agentic troubleshooting capabilities in a Linux-style sysadmin scenario.
 
-## Setup
-1. Install dependencies: pip install -r requirements.txt
-2. Run the server: python server/app.py
-3. Run inference: python inference.py
+### Overview
+The agent is tasked with restoring a downed web server. The environment requires the agent to:
+1. **Analyze logs** (syslog/error.log) to identify root causes.
+2. **Resolve conflicts** (addressing port 8080 blockage).
+3. **Validate status** to ensure service recovery.
+
+### Technical Setup
+- **Framework:** Docker-based environment.
+- **Port:** Running on `7860`.
+- **Primary Logic:** Located in `server/app.py`.
+
+### How to Validate
+Run the `inference.py` script to initiate the agentic evaluation loop.
