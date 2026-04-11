@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sysadmin-rl"
 version = "0.1.0"
+description = "Automated IT Support and System Diagnostics Environment"
 requires-python = ">=3.10"
 dependencies = [
     "flask",
@@ -13,10 +14,16 @@ dependencies = [
     "pydantic",
     "openai",
     "openenv-core",
+    "python-dotenv" # Good to have for local API key testing
 ]
 
 [project.scripts]
+# This maps the 'server' command to your app's main function
 server = "server.app:main"
+
+[tool.setuptools]
+packages = ["server", "server.graders"]
 
 [tool.setuptools.packages.find]
 where = ["."]
+include = ["server*"]
