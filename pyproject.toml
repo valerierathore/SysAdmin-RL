@@ -14,13 +14,13 @@ dependencies = [
     "pydantic",
     "openai",
     "openenv-core",
-    "python-dotenv" # Good to have for local API key testing
+    "python-dotenv"
 ]
 
 [project.scripts]
-# This maps the 'server' command to your app's main function
 server = "server.app:main"
 
+# FIXED: Combined into a single tool.setuptools section
 [tool.setuptools]
 packages = ["server", "server.graders"]
 
