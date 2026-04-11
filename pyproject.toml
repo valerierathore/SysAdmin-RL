@@ -22,8 +22,5 @@ dependencies = [
 server = "server.app:main"
 
 [tool.setuptools]
-packages = ["server", "server.graders"]
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["server*"]
+packages = ["server", "server.graders"]
