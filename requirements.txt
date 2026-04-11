@@ -2,4 +2,7 @@ flask
 numpy
 requests
 pydantic
-openai 
+openai
+openenv-core
+python-dotenv
+gunicorn
